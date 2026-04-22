@@ -1,0 +1,72 @@
+[data-theme = "light"]{
+    --bg: white;
+    --green: hsl(165, 90%, 23%);
+    --green2: hsl(165, 90%, 23%);
+    --border: hsl(224, 85%, 5%, 0.7);
+    --text: hsl(224, 85%, 5%);
+    --opaqueText: rgb(0 0 0 / 0.7);
+    --opaqueTextInverted: hsl(224, 85%, 5%, 0.9);
+}
+
+[data-theme = "dark"]{
+    --bg: hsl(210, 83%, 2%);
+    --bg2: hsl(208, 79%, 4%);
+    --bg3: hsl(205, 71%, 7%);
+    --text: #ffffff;
+    --oqText: rgb(255, 255, 255, 0.5);
+    --border: hsl(204, 56%, 20%);
+}
+
+*{
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 500;
+    -webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
+html, body{
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+h1{
+    margin: 0;
+}
+
+html{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background: var(--bg);
+}
+body, #root{
+    height: 100%;
+    width: 100%;
+}
+
+body, p{
+    margin: 0;
+}
+
+button{
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    outline: none;
+}
+button, label{
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+a{
+    text-decoration: none;
+}
+
+input[type="checkbox"]{
+    margin: 0;
+}

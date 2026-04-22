@@ -1,0 +1,292 @@
+#weatherSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 1000px;
+    gap: 15px;
+}
+
+#titleSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+#titleSection p:first-child{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+#card{
+    display: flex;
+    flex-direction: column;
+    width: 550px;
+    padding: 20px;
+    gap: 30px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: var(--bg3);
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+#card > div:first-child{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 17px;
+}
+#card > div:first-child svg{
+    color: rgb(59, 130, 246);
+    height: 1.5em;
+    width: auto;
+}
+#card > div:first-child p{
+    color: var(--text);
+    font-weight: 500;
+}
+
+#tempContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    padding: 15px 0px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: hsl(204, 56%, 20%, 0.2);
+    box-sizing: border-box;
+}
+#tempContainer div:first-child{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    font-size: 30px;
+    color: hsl(189, 100%, 43%);
+}
+#tempContainer div:first-child svg{
+    height: 1em;
+    width: auto;
+}
+#tempContainer div:first-child p{
+    font-weight: 700;
+}
+#tempContainer > p{
+    color: var(--oqText);
+    font-size: 15px;
+    font-weight: 400;
+}
+#tempContainer div:last-child{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 377px;
+    padding: 1.5px 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: hsl(204, 56%, 20%, 0.4);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+#controlSection{
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#airContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    gap: 15px;
+    background: hsl(204, 56%, 20%, 0.2);
+    box-sizing: border-box;
+}
+#airHead{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+#airHead div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    color: var(--text);
+}
+#airHead div svg{
+    height: 2.5em;
+    width: auto;
+    padding: 10px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    transition: all .3s;
+}
+.airOn{
+    background: rgb(59, 130, 246);
+    box-shadow: 0 0 15px 5px rgb(59, 130, 246, 0.5);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.airOff{
+    background: hsl(204, 56%, 20%, 0.4);
+}
+#airHead div p{
+    font-weight: 450;
+}
+
+#airPowerContainer{
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    gap: 10px;
+    background: hsl(204, 56%, 20%, 0.4);
+    box-sizing: border-box;
+}
+#airPowerHead{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+#airPowerHead p{
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+}
+#airPowerHead div{
+    display: flex;
+    justify-content: center;
+    width: 64px;
+    padding: 5px 0;
+    border-radius: 13px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    background: #00b8db4d;
+    box-sizing: border-box;
+}
+
+#airPowerContainer input{
+    accent-color: rgb(59, 130, 246);
+}
+
+#airPowerLevels{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#airPowerLevels p{
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+#autoContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 61.6px;
+    padding: 10px 15px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    gap: 10px;
+    background: hsl(204, 56%, 20%, 0.2);
+    box-sizing: border-box;
+}
+#autoContainer p{
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 450;
+}
+
+
+/*MEDIA QUERIES*/
+@media(max-width: 768px){
+    #weatherSection{
+        width: 100%;
+        gap: 10px;
+    }
+
+    #titleSection p:first-child{
+        font-size: 18px;
+    }
+
+    #card{
+        width: 100%;
+        padding: 15px;
+        gap: 20px;
+    }
+    #card > div:first-child{
+        font-size: 15px;
+    }
+
+    #tempContainer{
+        gap: 5px;
+        padding: 10px 0px;
+    }
+    #tempContainer div:first-child{
+        font-size: 25px;
+    }
+    #tempContainer > p{
+        font-size: 13px;
+    }
+    #tempContainer div:last-child{
+        width: 313px;
+        font-size: 11px;
+    }
+
+    #controlSection{
+        align-items: start;
+    }
+    #airContainer{
+        width: 100%;
+        gap: 10px;
+    }
+    #airHead div{
+        font-size: 14px;
+    }
+    #airHead div svg{
+        padding: 8px;
+    }
+
+    #airPowerContainer{
+        padding: 10px;
+        border-radius: 10px;
+    }
+    #airPowerHead p{
+        font-size: 12px;
+    }
+    #airPowerHead div{
+        width: 55px;
+        padding: 3px 0;
+        border-radius: 13px;
+        font-size: 12px;
+    }
+    #airPowerLevels p{
+        font-size: 11px;
+    }
+
+    #autoContainer{
+        flex-direction: column;
+        height: 65.8px;
+        padding: 10px 5px;
+        gap: 5px;
+    }
+    #autoContainer p{
+        font-size: 14px;
+    }
+}

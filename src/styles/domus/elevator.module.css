@@ -1,0 +1,228 @@
+#elevatorSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 1000px;
+    gap: 15px;
+}
+
+#titleSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+#titleSection p:first-child{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+#card{
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    padding: 20px;
+    gap: 25px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: var(--bg3);
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+#card > div:first-child{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 17px;
+}
+#card > div:first-child svg{
+    color: rgb(59, 130, 246);
+    height: 1.5em;
+    width: auto;
+}
+#card > div:first-child p{
+    color: var(--text);
+    font-weight: 500;
+}
+
+#graphicContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 15px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: hsl(204, 56%, 20%, 0.2);
+    box-sizing: border-box;
+}
+#graphicFloor{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 450;
+    box-sizing: border-box;
+}
+#elevator{
+    display: flex;
+    position: absolute;
+    height: 155px;
+    padding: 20px 5px;
+    border-right: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    background: hsl(204, 56%, 20%, 0.4);
+    box-sizing: border-box;
+}
+#elevator svg{
+    height: 40px;
+    width: auto;
+    color: rgb(59, 130, 246);
+    background: hsl(204, 56%, 20%, 0.4);
+    border-radius: 5px;
+    transition: all 3s;
+    box-shadow: 0 0 15px 5px rgb(59, 130, 246, 0.5);
+}
+.firstFloor{
+    transform: translateY(75px);
+}
+.secondFloor{
+    transform: translateY(0);
+}
+
+#buttonsSection{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+#titleButtonsSection p:first-child{
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 400;
+}
+#titleButtonsSection p:nth-child(2){
+    color: var(--oqText);
+    font-size: 14px;
+    font-weight: 300;
+}
+
+#buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    gap: 3px;
+    padding: 5px 0px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: hsl(204, 56%, 20%, 0.2);
+    transition: all 0.2s;
+}
+.button:hover{
+    scale: 1.03;
+    box-shadow: 0 0 15px 3px rgb(59, 130, 246, 0.3);
+}
+.button svg{
+    color: var(--text);
+    height: 20px;
+    width: auto;
+}
+.button p:nth-child(2){
+    color: var(--text);
+    font-size: 17px;
+    font-weight: 700;
+}
+.button p:nth-child(3){
+    color: var(--oqText);
+    font-size: 13px;
+    font-weight: 300;
+}
+.activeButton{
+    background: var(--bg2);
+    pointer-events: none;
+}
+.isMoving{
+    background: var(--bg);
+    pointer-events: none;
+    animation: pulse 1.3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+
+@keyframes pulse{
+  50%{
+    opacity: 0.5;
+  }
+}
+
+
+/*MEDIA QUERIES*/
+@media(max-width: 768px){
+    #elevatorSection{
+        width: 100%;
+        gap: 10px;
+    }
+
+    #titleSection p:first-child{
+        font-size: 18px;
+    }
+
+    #card{
+        width: 320px;
+        padding: 15px;
+        gap: 20px;
+    }
+    #card > div:first-child{
+        font-size: 15px;
+    }
+
+    #graphicFloor{
+        font-size: 13px;
+    }
+
+    #buttonsSection{
+        gap: 10px;
+    }
+    #titleButtonsSection p:first-child{
+        font-size: 14px;
+    }
+    #titleButtonsSection p:nth-child(2){
+        font-size: 12px;
+    }
+
+    .button{
+        width: 100px;
+    }
+    .button:hover{
+        scale: 1;
+        box-shadow: none;
+    }
+    .button:active{
+        scale: 0.9;
+        box-shadow: 0 0 15px 3px rgb(59, 130, 246, 0.3);
+    }
+    .button svg{
+        height: 15px;
+    }
+    .button p:nth-child(2){
+        font-size: 15px;
+    }
+    .button p:nth-child(3){
+        font-size: 11px;
+    }
+}

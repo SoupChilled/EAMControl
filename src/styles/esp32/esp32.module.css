@@ -1,0 +1,144 @@
+#MainContainer{
+    display: flex;  
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    gap: 50px;
+    box-sizing: border-box;
+}
+
+#head{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 15px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    box-sizing: border-box;
+}
+#head img{
+    height: 90px;
+    width: auto;
+}
+#head p{
+    font-size: 35px;
+    font-weight: 700;
+    color: hsl(195, 100%, 40%);
+}
+
+#cards{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+#card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    gap: 20px;
+    transition: all 0.4s;
+}
+#image{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+#image div{
+    display: flex;
+    justify-content: right;
+    width: 100%;
+}
+#image svg{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    padding: 7px;
+    background: var(--bg2);
+    box-sizing: border-box;
+}
+#image img{
+    display: flex;
+    height: 150px;
+    border-radius: 10px;
+    width: auto;
+}
+#cardInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    color: var(--text);
+    gap: 10px;
+}
+#cardInfo p:first-child{
+    font-size: 20px;
+    font-weight: 700;
+}
+#cardInfo p:nth-child(2){
+    font-weight: 400;
+    font-size: 15px;
+}
+#features{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+#features div{
+    font-size: 13px;
+    color: var(--oqText);
+    padding: 3px 5px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+#goProject{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+#goProject svg{
+    transition: all 0.3s;
+}
+#goProject:hover{
+    color: var(--text);
+}
+#goProject:hover svg{
+    transform: translateX(10px);
+}
+
+.houseCard, .houseFeatures div{
+    background: rgb(76, 29, 149, 0.3);
+    border: 1px solid rgb(139, 92, 246);
+}
+.houseCard:hover{
+    scale: 1.05;
+    box-shadow: 0 0 15px 5px rgb(139, 92, 246, 0.5);
+}
+.houseImage svg, .houseCardInfo p:first-child, .houseGoProject{
+    color: rgb(139, 92, 246);
+}
+.houseGoProject{
+    border: 1px solid rgb(139, 92, 246, 0.3);
+}
+.houseGoProject:hover{
+    background: rgb(139, 92, 246);
+}

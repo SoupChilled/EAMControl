@@ -1,0 +1,235 @@
+#lightsSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 1000px;
+    gap: 15px;
+}
+
+#titleSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+#titleSection p:first-child{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+}
+#titleInfo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+#titleInfo div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+#titleInfo div svg{
+    height: 1em;
+    width: auto;
+}
+#titleInfo div p{
+    font-size: 15px;
+    color: var(--oqText);
+    font-weight: 400;
+}
+
+#autoModeContainer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px;
+    gap: 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg3);
+    box-sizing: border-box;
+}
+#autoModeTitle{
+    display: flex;
+    flex-direction: column;
+}
+#autoModeTitle div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+#autoModeTitle div div{
+    font-size: 17px;
+    color: var(--text);
+    gap: 5px;
+}
+#autoModeTitle div div svg{
+    color: var(--text);
+    height: 1.3em;
+}
+#autoModeTitle div div p{
+    font-weight: 500;
+}
+#autoModeTitle > p{
+    font-size: 15px;
+    color: var(--oqText);
+    font-weight: 300;
+}
+
+#lightsCards{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 25px;
+    box-sizing: border-box;
+}
+#floor{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: 15px;
+    padding: 10px;
+    background: var(--bg3);
+    gap: 15px;
+    box-sizing: border-box;
+}
+#floor > p{
+    width: 100%;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 27px;
+    background: hsl(204, 56%, 20%, 0.4);
+    color: var(--text);
+    font-size: 17px;
+    font-weight: 700;
+    box-sizing: border-box;
+}
+#row{
+    display: flex;
+    flex-direction: row;
+    gap: 9px;
+}
+#card{
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: hsl(204, 56%, 20%, 0.4);
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+#card:hover{
+    scale: 1.02;
+    box-shadow: 0 0 15px 3px rgb(59, 130, 246, 0.2);
+}
+#cardTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+#cardTitle div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    font-size: 15px;
+}
+#cardTitle div svg{
+    height: 23px;
+    width: auto;
+    padding: 5px;
+    border-radius: 7px;
+    transition: all .3s;
+}
+.lightOff{
+    color: var(--oqText);
+    background: var(--border);
+}
+.lightOn{
+    background: #f0b10033;
+    color: hsl(44 100% 47%);
+}
+#cardTitle div p{
+    color: var(--text);
+    font-weight: 500;
+}
+
+
+/*MEDIA QUERIES*/
+@media(max-width: 768px){
+    #lightsSection{
+        width: 100%;
+        gap: 10px;
+    }
+
+    #titleSection p:first-child{
+        font-size: 18px;
+    }
+    #titleInfo{
+        gap: 10px;
+    }
+    #titleInfo div p{
+        font-size: 13px;
+    }
+
+    #autoModeContainer{
+        padding: 15px;
+    }
+    #autoModeTitle{
+        gap: 5px;
+    }
+    #autoModeTitle div div{
+        font-size: 15px;
+    }
+    #autoModeTitle > p{
+        font-size: 13px;
+    }
+
+    #lightsCards{
+        gap: 20px;
+    }
+    #floor{
+        gap: 10px;
+    }
+    #floor > p{
+        font-size: 15px;
+    }
+    #row{
+        gap: 0;
+        width: 100%;
+        justify-content: space-around;
+    }
+    #card{
+        width: 87px;
+        padding: 10px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+    }
+    #card:hover{
+        scale: 1;
+        box-shadow: none;
+    }
+    #cardTitle{
+        flex-direction: column;
+        gap: 5px;
+    }
+    #cardTitle div{
+        flex-direction: column;
+        gap: 5px;
+        font-size: 13px;
+    }
+    #cardTitle div p{
+        text-align: center;
+    }
+}

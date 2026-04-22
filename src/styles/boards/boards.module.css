@@ -1,0 +1,185 @@
+#MainContainer{
+    display: flex;  
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    gap: 50px;
+    box-sizing: border-box;
+}
+
+#head{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 15px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    box-sizing: border-box;
+}
+#head p:first-child{
+    font-size: 40px;
+    font-weight: 700;
+    color: hsl(195, 100%, 40%);
+}
+#head p:nth-child(2){
+    font-size: 20px;
+    color: var(--text);
+}
+
+#cards{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+#card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 324px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    gap: 20px;
+    transition: all 0.4s;
+}
+#image{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+#image div{
+    display: flex;
+    justify-content: right;
+    width: 100%;
+}
+#image svg{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    padding: 7px;
+    background: var(--bg2);
+    box-sizing: border-box;
+}
+#image img{
+    display: flex;
+    height: 110px;
+    width: auto;
+}
+#cardInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    color: var(--text);
+    gap: 10px;
+}
+#cardInfo p:first-child{
+    font-size: 20px;
+    font-weight: 700;
+}
+#cardInfo p:nth-child(2){
+    font-weight: 400;
+    font-size: 15px;
+}
+#features{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+}
+#features div{
+    font-size: 13px;
+    color: var(--oqText);
+    padding: 3px 5px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+#goBoard{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+#goBoard svg{
+    transition: all 0.3s;
+}
+#goBoard:hover{
+    color: var(--text);
+}
+#goBoard:hover svg{
+    transform: translateX(10px);
+}
+
+.esp32Card, .esp32Features div{
+    background: rgb(76, 29, 149, 0.3);
+    border: 1px solid rgb(139, 92, 246);
+}
+.esp32Card:hover{
+    scale: 1.05;
+    box-shadow: 0 0 15px 5px rgb(139, 92, 246, 0.5);
+}
+.esp32Image svg, .esp32CardInfo p:first-child, .esp32GoBoard{
+    color: rgb(139, 92, 246);
+}
+.esp32GoBoard{
+    border: 1px solid rgb(139, 92, 246, 0.3);
+}
+.esp32GoBoard:hover{
+    background: rgb(139, 92, 246);
+}
+
+.arduinoCard, .arduinoFeatures div{
+    background: rgb(6, 78, 59, 0.3);
+    border: 1px solid rgb(52, 211, 153);
+}
+.arduinoCard:hover{
+    scale: 1.05;
+    box-shadow: 0 0 15px 5px rgb(52, 211, 153, 0.5);
+}
+.arduinoImage svg, .arduinoCardInfo p:first-child, .arduinoGoBoard{
+    color: rgb(52, 211, 153);
+}
+.arduinoGoBoard{
+    border: 1px solid rgb(52, 211, 153, 0.3);
+
+    pointer-events: none;
+    color: gray;
+}
+.arduinoGoBoard:hover{
+    background: rgb(52, 211, 153);
+}
+
+.microbitCard, .microbitFeatures div{
+    background: rgb(30, 58, 138, 0.3);
+    border: 1px solid rgb(59, 130, 246);
+}
+.microbitCard:hover{
+    scale: 1.05;
+    box-shadow: 0 0 15px 5px rgb(59, 130, 246, 0.5);
+}
+.microbitImage svg, .microbitCardInfo p:first-child, .microbitGoBoard{
+    color: rgb(59, 130, 246);
+}
+.microbitGoBoard{
+    border: 1px solid rgb(59, 130, 246, 0.3);
+
+    pointer-events: none;
+    color: gray;
+}
+.microbitGoBoard:hover{
+    background: rgb(59, 130, 246);
+}

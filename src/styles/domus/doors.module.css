@@ -1,0 +1,212 @@
+#doorsSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 1000px;
+    gap: 15px;
+}
+
+#titleSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+#titleSection p:first-child{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+#doorsCards{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+#card{
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    padding: 20px;
+    gap: 30px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: var(--bg3);
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+#titleCard{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+#titleCard svg{
+    height: 50px;
+    width: auto;
+    border-radius: 10px;
+    padding: 5px;
+    box-sizing: border-box;
+    transition: all .3s;
+}
+#titleCard div p{
+    color: var(--text);
+    font-size: 17px;
+    font-weight: 500;
+}
+#titleCard div div{
+    display: flex;
+    justify-content: center;
+    width: 66px;
+    font-size: 13px;
+    padding: 1.5px 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: all .5s;
+}
+.doorOpened{
+    background: rgba(127, 29, 29, 0.2);
+    border: 1px solid rgba(153, 27, 27, 0.3);
+    color: rgb(248, 113, 113);
+}
+.doorClosed{
+    background: rgba(6, 78, 59, 0.2);
+    border: 1px solid rgba(6, 95, 70, 0.3);
+    color: rgb(52, 211, 153);
+}
+
+#controlSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+#controlSection button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 162px;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: all .5s;
+}
+#controlSection button:hover{
+    scale: 1.05;
+}
+#controlSection button:active{
+    scale: 1;
+}
+#controlSection button svg{
+    height: 1.5em;
+    width: auto;
+}
+.openDoor{
+    background: rgb(59, 130, 246);
+}
+.closeDoor{
+    background: red;
+}
+
+#lightContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    gap: 10px;
+    background: hsl(204, 56%, 20%, 0.2);
+}
+#lightContainer svg{
+    height: 23px;
+    width: auto;
+    padding: 5px;
+    border-radius: 7px;
+    transition: all .3s;
+}
+.lightOff{
+    color: var(--oqText);
+    background: hsl(204, 56%, 20%, 0.4);
+}
+.lightOn{
+    background: #f0b10033;
+    color: hsl(44 100% 47%);
+}
+
+
+/*MEDIA QUERIES*/
+@media(max-width: 768px){
+    #doorsSection{
+        width: 100%;
+        gap: 10px;
+    }
+
+    #titleSection p:first-child{
+        font-size: 18px;
+    }
+
+    #doorsCards{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #card{
+        width: 320px;
+        padding: 15px;
+        gap: 20px;
+    }
+    #titleCard{
+        gap: 5px;
+    }
+    #titleCard svg{
+        height: 40px;
+        padding: 3px;
+    }
+    #titleCard div p{
+        font-size: 15px;
+    }
+    #titleCard div div{
+        width: 60px;
+        font-size: 11px;
+    }
+
+    #controlSection{
+        justify-content: space-around;
+    }
+    #controlSection button{
+        width: 144px;
+        gap: 5px;
+        font-size: 11px;
+        padding: 10px 0;
+        border-radius: 10px;
+    }
+    #controlSection button:hover{
+        scale: 1;
+    }
+    #controlSection button:active{
+        scale: 0.9;
+    }
+
+    #lightContainer{
+        padding: 5px 10px;
+        gap: 5px;
+    }
+    #lightContainer svg{
+        height: 23px;
+        width: auto;
+        padding: 5px;
+        border-radius: 7px;
+        transition: all .3s;
+    }
+}

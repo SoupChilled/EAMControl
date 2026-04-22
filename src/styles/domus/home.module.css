@@ -1,0 +1,178 @@
+#homeSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 1000px;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+#row{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+#cardInfo{
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    padding: 20px;
+    gap: 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg3);
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+#cardInfo:hover{
+    scale: 1.03;
+    box-shadow: 0 0 15px 3px rgb(59, 130, 246, 0.3);
+}
+#cardTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+#cardTitle div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    font-size: 15px;
+    color: var(--text);
+}
+#cardTitle div svg, #cardTitle svg:last-child{
+    color: var(--text);
+    height: 1.3em;
+}
+#cardBody{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+#cardBody > p:first-child{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+}
+#cardBody > p:last-child{
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--oqText);
+}
+
+#cardBody2{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+.dot{
+    height: 7px;
+    width: 7px;
+    border-radius: 50%;
+    transition: all 1s;
+}
+.dotEnabled{
+    background: rgb(52, 211, 153);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.dotDisabled{
+    background: var(--oqText);
+    animation: none;
+}
+#cardBody2 p{
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--oqText);
+}
+#row2{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+#row2 p{
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+}
+#row2 div{
+    display: flex;
+    justify-content: center;
+    width: 66px;
+    font-size: 12px;
+    padding: 1.5px 0;
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+.doorOpened{
+    background: rgba(127, 29, 29, 0.2);
+    border: 1px solid rgba(153, 27, 27, 0.3);
+    color: rgb(248, 113, 113);
+}
+.doorClosed{
+    background: rgba(6, 78, 59, 0.2);
+    border: 1px solid rgba(6, 95, 70, 0.3);
+    color: rgb(52, 211, 153);
+}
+
+
+@keyframes pulse{
+  50%{
+    opacity: 0.5;
+  }
+}
+
+
+/*MEDIA QUERIES*/
+@media(max-width: 768px){
+    #homeSection{
+        width: 100%;
+        gap: 10px;
+    }
+    #row{
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    #cardInfo{
+        width: 172.5px;
+        padding: 15px;
+    }
+    #cardInfo:hover{
+        scale: 1;
+        box-shadow: none;
+    }
+    #cardInfo:active{
+        scale: 0.9;
+        box-shadow: 0 0 15px 3px rgb(59, 130, 246, 0.3);
+    }
+    #cardTitle div{
+        gap: 3px;
+        font-size: 13px;
+    }
+    #cardTitle div svg, #cardTitle svg:last-child{
+        height: 1.4em;
+    }
+    #cardBody > p:first-child{
+        font-size: 18px;
+    }
+    #cardBody > p:last-child{
+        font-size: 13px;
+    }
+    #cardBody2 p{
+        font-size: 13px;
+    }
+    #row2 p{
+        font-size: 12px;
+    }
+    #row2 div{
+        width: 66px;
+        font-size: 10px;
+        padding: 1.5px 0;
+    }
+}

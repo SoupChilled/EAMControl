@@ -1,0 +1,415 @@
+#MainContainer{
+    display: flex;  
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    width: 100%;
+    gap: 40px;
+    padding-top: 158.4px;
+    padding-bottom: 15px;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+/*GUARD*/
+#guard{
+    display: flex;  
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    gap: 20px;
+    box-sizing: border-box;
+}
+#codeInput{
+    display: flex;
+    position: relative;
+    width: 300px;
+    height: 55px;
+}
+#codeInput input{
+    width: 100%;
+    padding-left: 45px;
+    font-size: 20px;
+    font-weight: 500;
+    background: none;
+    border: solid 2px var(--oqText);
+    border-radius: 15px;
+    color: var(--text);
+    outline: none;
+}
+#codeInput input:focus, #codeInput input:valid{
+    border: 2px solid #ffffff;
+}
+#codeInput svg{
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    fill: var(--oqText);
+    pointer-events: none;
+    transition: 250ms cubic-bezier(0.4,0,0.2,1);
+}
+#codeInput input:valid ~ svg{
+    fill: #ffffff;
+}
+#codeInput label{
+    position: absolute;
+    left: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--oqText);
+    font-size: 20px;
+    pointer-events: none;
+    transition: 250ms cubic-bezier(0.4,0,0.2,1);
+}
+#codeInput input:focus ~ label, #codeInput input:valid ~ label{
+    transform: translate(-10%, -150%) scale(0.8);
+    padding: 0 3px 0 3px;
+    background: var(--bg);
+    color: var(--text);
+    font-weight: 500;
+}
+
+#head{
+    display: flex;
+    position: fixed;
+    top: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 15px;
+    gap: 10px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    box-sizing: border-box;
+    z-index: 1;
+}
+#title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+#title svg{
+    height: 52px;
+    width: auto;
+    color: rgb(59, 130, 246);
+    border: 1px solid rgb(59, 130, 246, 0.5);
+    background: rgb(30, 58, 138, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+#title p{
+    font-size: 40px;
+    font-weight: 700;
+    background: linear-gradient(84deg,rgba(59, 130, 246, 1) 0%, HSL(239, 48%, 60%) 50%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#generalInfo{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+#row{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+#row > div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-wrap: nowrap;
+    gap: 5px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 2px 10px;
+    background: rgb(59, 130, 246, 0.07);
+    font-size: 15px;
+    box-sizing: border-box;
+    user-select: none;
+}
+.ESP32State{
+    width: 181px;
+}
+.lightsState{
+    width: 113px;
+}
+.elevatorState{
+    width: 84px;
+}
+.doorsState{
+    width: 125px;
+}
+.poolState{
+    width: 164px;
+}
+.weatherState{
+    width: 68px;
+}
+#row > button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    color: var(--oqText);
+    font-size: 15px;
+    font-weight: 400;
+    text-wrap: nowrap;
+}
+#row div svg{
+    height: 1em;
+    width: auto;
+}
+#row div p{
+    font-weight: 400;
+}
+.dot{
+    height: 7px;
+    width: 7px;
+    border-radius: 50%;
+    transition: all 1s;
+}
+.dotEnabled{
+    background: rgb(52, 211, 153);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.dotDisabled{
+    background: var(--oqText);
+    animation: none;
+}
+
+
+#bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.barButton{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 7px;
+    font-size: 15px;
+    color: var(--text);
+    padding: 5px 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg2);
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+.barButton svg{
+    height: 1em;
+    width: auto;
+}
+.barButton:hover{
+    scale: 1.1;
+}
+.barButton:active{
+    scale: 1;
+}
+.activeBarButton{
+    background: rgb(59, 130, 246);
+    box-shadow: 0 0 15px 5px rgb(59, 130, 246, 0.5);
+    scale: 1.1;
+}
+
+.ESP32Disabled{
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+@keyframes pulse{
+  50%{
+    opacity: 0.5;
+  }
+}
+
+
+/*MEDIA QUERIES*/
+@media(max-width: 768px){
+    #MainContainer{
+        gap: 20px;
+        padding: 146.6px 10px 98px;
+    }
+
+    #head{
+        padding: 10px;
+    }
+    #title{
+        gap: 10px;
+    }
+    #title svg{
+        height: 45px;
+    }
+    #title p{
+        font-size: 35px;
+    }
+    #title button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80px;
+        color: var(--oqText);
+        font-size: 15px;
+        font-weight: 400;
+        text-wrap: nowrap;
+    }
+    #generalInfo{
+        gap: 10px;
+        flex-direction: column;
+        align-items: center;
+    }
+    #row{
+        gap: 10px;
+    }
+    #row > div{
+        font-size: 13px;
+        padding: 1px 7px;
+    }
+    .ESP32State{
+        width: 155px;
+    }
+    .lightsState{
+        width: 96px;
+    }
+    .elevatorState{
+        width: 71px;
+    }
+    .doorsState{
+        width: 106px;
+    }
+    .poolState{
+        width: 139px;
+    }
+    .weatherState{
+        width: 56px;
+    }
+    #row > button{
+        font-size: 13px;
+        width: 69px;
+    }
+
+    #bar{
+        justify-content: space-between;
+        position: fixed;
+        bottom: 0;
+        height: 78px;
+        width: 100%;
+        gap: 0;
+        padding: 0px 10px;
+        border-top: 1px solid var(--border);
+        background: hsl(208, 79%, 4%);
+        box-sizing: border-box;
+        z-index: 1;
+    }
+    .barButton{
+        flex-direction: column;
+        width: 62px;
+        gap: 3px;
+        padding: 10px 5px;
+        font-size: 12px;
+        background: var(--bg3);
+        border: none;
+    }
+    .barButton svg, .option svg{
+        height: 1.5em;
+    }
+    .barButton:hover{
+        scale: 1.07;
+    }
+    .barButton:active{
+        scale: 1;
+    }
+    .activeBarButton{
+        color: rgb(59, 130, 246);
+        background: rgb(59, 130, 246, 0.2);
+        box-shadow: none;
+        scale: 1.07;
+    }
+
+    #moreButton{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+    }
+    #moreButton div{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .checkbox{
+        position: absolute;
+        width: 53px;
+        height: 53px;
+        opacity: 0;
+        z-index: 10;
+    }
+    .buttonMenu, .option{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        color: var(--text);
+        width: 53px;
+        height: 53px;
+        border-radius: 50%;
+        box-sizing: border-box;
+    }
+    .buttonMenu{
+        font-size: 30px;
+        font-weight: 700;
+        z-index: 1;
+    }
+    .option{
+        flex-direction: column;
+        position: absolute;
+        font-size: 12px;
+        font-weight: 500;
+        transition: all 0.3s;
+        z-index: -1;
+    }
+    .activePlus{
+        color: rgb(59, 130, 246);
+        background: rgb(59, 130, 246, 0.2);
+        scale: 1;
+    }
+    .option:active{
+        scale: 0.93;
+    }
+
+    .checkbox:not(:checked) ~ .buttonMenu::before{
+        content: '+';
+    }
+    .checkbox:checked ~ .buttonMenu::after{
+        content: "x";
+    }
+    .checkbox:checked ~ .optionA{
+        transform: translateY(-65px) translateX(-35px);
+    }
+    .checkbox:checked ~ .optionB{
+        transform: translateY(-65px) translateX(35px);
+    }
+    
+    #moreButton p{
+        font-size: 12px;
+        color: var(--text);
+    }
+}
