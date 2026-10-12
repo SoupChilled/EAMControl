@@ -144,7 +144,7 @@
     width: 181px;
 }
 .lightsState{
-    width: 113px;
+    width: 112px;
 }
 .elevatorState{
     width: 84px;
@@ -156,7 +156,10 @@
     width: 164px;
 }
 .weatherState{
-    width: 68px;
+    width: 144px;
+}
+.alarmState{
+    width: 176px;
 }
 #row > button{
     display: flex;
@@ -244,7 +247,7 @@
 @media(max-width: 768px){
     #MainContainer{
         gap: 20px;
-        padding: 146.6px 10px 98px;
+        padding: 165px 10px 98px;
     }
 
     #head{
@@ -279,25 +282,27 @@
     }
     #row > div{
         font-size: 13px;
-        padding: 1px 7px;
     }
     .ESP32State{
-        width: 155px;
+        width: 139.32px;
     }
     .lightsState{
-        width: 96px;
+        width: 100.36px;
     }
     .elevatorState{
-        width: 71px;
+        width: auto;
     }
     .doorsState{
-        width: 106px;
+        width: 111.76px;
     }
     .poolState{
-        width: 139px;
+        width: auto;
     }
     .weatherState{
-        width: 56px;
+        width: 128.03px;
+    }
+    .alarmState{
+        width: 156px;
     }
     #row > button{
         font-size: 13px;
@@ -305,7 +310,7 @@
     }
 
     #bar{
-        justify-content: space-between;
+        justify-content: space-around;
         position: fixed;
         bottom: 0;
         height: 78px;

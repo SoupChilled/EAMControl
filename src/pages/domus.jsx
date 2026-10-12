@@ -12,7 +12,7 @@ import Loader from '../components/loader/loader';
 
 const Domus = () => {
     useEffect(() => {
-        document.title = "DOMUS";
+        document.title = "SMART HOME";
     }, []);
 
     const [screen, setScreen] = useState("");
@@ -173,6 +173,52 @@ const Domus = () => {
             console.log("Error:" + error.code);
         }
     }
+
+    const audioRef = useRef(null);
+
+useEffect(() => {
+  const playAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.play()
+        .then(() => {
+          window.removeEventListener('click', playAudio);
+          window.removeEventListener('touchstart', playAudio);
+        })
+        .catch((error) => {
+          console.log("Autoplay bloqueado. Esperando interacción...", error);
+        });
+    }
+  };
+
+  if (ESP32.alarmActive && ESP32.alarm) {
+    if (!audioRef.current) {
+      audioRef.current = new Audio("/sounds/buzzer.mp3");
+      audioRef.current.loop = true;
+    }
+
+    playAudio();
+
+    window.addEventListener('click', playAudio);
+    window.addEventListener('touchstart', playAudio);
+
+  } else {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    window.removeEventListener('click', playAudio);
+    window.removeEventListener('touchstart', playAudio);
+  }
+
+  return () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    window.removeEventListener('click', playAudio);
+    window.removeEventListener('touchstart', playAudio);
+  };
+}, [ESP32.alarmActive, ESP32.alarm]);
+
     
     // RETURNS
     if(loading){
@@ -184,19 +230,19 @@ const Domus = () => {
         return(
             <div id={styles.guard}>
                 <div id={styles.codeInput}>
-                    <input type="password" title="" required onChange={(e) => {
-                        if(e.target.value === "314159265"){
+                    <input type="number" title="" required onChange={(e) => {
+                        if(Number(e.target.value) === ESP32.adminCode){
                             setAdmin(true);
                             setGuard(false);
                         }
-                        if(e.target.value === ESP32.code){
+                        if(Number(e.target.value) === ESP32.code){
                             setGuard(false);
                         }
                     }}/>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M12 13a1.49 1.49 0 0 0-1 2.61V17a1 1 0 0 0 2 0v-1.39A1.49 1.49 0 0 0 12 13m5-4V7A5 5 0 0 0 7 7v2a3 3 0 0 0-3 3v7a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-7a3 3 0 0 0-3-3M9 7a3 3 0 0 1 6 0v2H9Zm9 12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1Z" />
                     </svg>
-                    <label>CÓDIGO (1234)</label>
+                    <label>CÓDIGO</label>
                 </div>
             </div>
         );
@@ -207,45 +253,48 @@ const Domus = () => {
             <div id={styles.head}>
                 <div id={styles.title}>
                     <svg onTouchStart={() => {pressTimer = setTimeout(() => setShowCode(prev => !prev), 1000);}} onTouchEnd={() => clearTimeout(pressTimer)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    <p>DOMUS {!screen && " - Casa Inteligente"}</p>
-                    {admin && showCode && screen ? (<button onClick={() => handleToggleESP32("code", String(Math.floor(Math.random() * 9000)+1000))}>Code: {ESP32.code}</button>) : null}
+                    <p>SMART HOME</p>
+                    {/*<p>DOMUS {!screen && " - Casa Inteligente"}</p>*/}
+                    {/*{admin && showCode && screen ? (<button onClick={() => handleToggleESP32("code", String(Math.floor(Math.random() * 9000)+1000))}>Code: {ESP32.code}</button>) : null}*/}
                 </div>
 
                 <div id={styles.generalInfo}>
                     <div id={styles.row}>
                         <div className={styles.ESP32State} style={{transition: "all 1s", color: ESP32.state ? "rgb(52, 211, 153)" : "var(--oqText)"}}>
                             <div className={`${styles.dot} ${ESP32.state ? styles.dotEnabled : styles.dotDisabled}`}/>
-                            <p>{ESP32.state ? "ESP32 Conectada" : "ESP32 Desconectada"}</p>
+                            <p>{ESP32.state ? "ESP32 Conectada" : "ESP32 Apagada"}</p>
                         </div>
 
                         <div className={styles.lightsState} style={{color: "hsl(44 100% 47%)"}}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
-                            <p>{Object.values(lights).filter(value => value === true).length}/10 Luces</p>
+                            <p>{Object.values(lights).filter(value => value === true).length}/6 Luces</p>
                         </div>
 
-                        <div className={styles.elevatorState} style={{color: "rgb(139, 92, 246)"}}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
-                            <p>Piso {actuators.elevator}</p>
-                        </div>
-                    </div>
-
-                    <div id={styles.row}>
                         <div className={styles.doorsState} style={{color: "hsl(144 100% 39%)"}}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 4h3a2 2 0 0 1 2 2v14"></path><path d="M2 20h3"></path><path d="M13 20h9"></path><path d="M10 12v.01"></path><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"></path></svg>
                             <p>{[actuators.mainDoor, actuators.garageDoor].filter(value => value === true).length}/2 Puertas</p>
                         </div>
 
-                        <div className={styles.poolState} style={{color: "rgb(59, 130, 246)"}}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path></svg>
-                            <p>Chorro {actuators.fountain !== 0 ? "encendido" : "detenido"}</p>
-                        </div>
+                        {/*<div className={styles.elevatorState} style={{color: "rgb(139, 92, 246)"}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+                            <p>Piso {actuators.elevator}</p>
+                        </div>*/}
+                    </div>
 
+                    <div id={styles.row}>
                         <div className={styles.weatherState} style={{color: "hsl(189 100% 43%)"}}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m8 4v10.54c1.57 0.91 2.33 2.75 1.86 4.5-0.46 1.75-2.05 2.96-3.86 2.96-1.81 0-3.4-1.21-3.86-2.96-0.47-1.75 0.29-3.59 1.86-4.5v-10.54c0-0.53 0.21-1.04 0.59-1.41 0.37-0.38 0.88-0.59 1.41-0.59 0.53 0 1.04 0.21 1.41 0.59 0.38 0.37 0.59 0.88 0.59 1.41z"/></svg>
-                            <p>--°C</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="hsl(189 100% 43%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path><path d="M9.6 4.6A2 2 0 1 1 11 8H2"></path><path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path></svg>
+                            <p>Aire {actuators.AC !== 0 ? "encendido" : "apagado"}</p>
                         </div>
 
-                        {admin && showCode && !screen ? (<button onClick={() => handleToggleESP32("code", String(Math.floor(Math.random() * 9000)+1000))}>Code: {ESP32.code}</button>) : null}
+                        <div className={styles.alarmState} style={{color: "rgb(139, 92, 246)"}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                              <path fill="none" stroke="rgb(139, 92, 246)" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 18v-6a5 5 0 1 1 10 0v6M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2zm16-9h1m-3.5-7.5L18 5M2 12h1m9-10v1M4.929 4.929l.707.707M12 12v6"></path>
+                            </svg>
+                            <p>Alarma {ESP32.alarm === true ? "activada" : "desactivada"}</p>
+                        </div>
+
+                        {admin && showCode ? (<button onClick={() => handleToggleESP32("code", String(Math.floor(Math.random() * 9000)+1000))}>Code: {ESP32.code}</button>) : null}
                     </div>
                 </div>
             </div>
@@ -261,7 +310,7 @@ const Domus = () => {
                     Luces
                 </button>
 
-                {screen && (
+                {/*{screen && (
                     <div id={styles.moreButton} ref={menuRef}>
                         <div>
                             <input className={styles.checkbox} type="checkbox" checked={moreButtonActive} onChange={() => setMoreButtonActive(!moreButtonActive)}/>
@@ -284,14 +333,30 @@ const Domus = () => {
                 <button className={`${styles.barButton} ${section === "elevator" && styles.activeBarButton}`} onClick={() => setSection("elevator")}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
                     Ascensor
-                </button>
+                </button>*/}
 
                 <button className={`${styles.barButton} ${section === "doors" && styles.activeBarButton}`} onClick={() => setSection("doors")}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 4h3a2 2 0 0 1 2 2v14"></path><path d="M2 20h3"></path><path d="M13 20h9"></path><path d="M10 12v.01"></path><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"></path></svg>
                     Puertas
                 </button>
 
-                {!screen && (
+                <button className={`${styles.barButton} ${section === "weather" && styles.activeBarButton}`} onClick={() => setSection("weather")}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path><path d="M9.6 4.6A2 2 0 1 1 11 8H2"></path><path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path></svg>
+                    Clima
+                </button>
+
+                <button className={`${styles.barButton} ${section === "security" && styles.activeBarButton}`} onClick={() => setSection("security")}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                      <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                        <path d="M18.709 3.495C16.817 2.554 14.5 2 12 2s-4.816.554-6.709 1.495c-.928.462-1.392.693-1.841 1.419S3 6.343 3 7.748v3.49c0 5.683 4.542 8.843 7.173 10.196c.734.377 1.1.566 1.827.566s1.093-.189 1.827-.566C16.457 20.08 21 16.92 21 11.237V7.748c0-1.405 0-2.108-.45-2.834s-.913-.957-1.841-1.419"></path>
+                        <path d="M12 9v1m-1-.5a1 1 0 1 0 2 0a1 1 0 0 0-2 0"></path>
+                        <path d="M12.75 14h-1.5l.75-3.5z"></path>
+                      </g>
+                    </svg>
+                    Seguridad
+                </button>
+
+                {/*{!screen && (
                     <>
                         <button className={`${styles.barButton} ${section === "pool" && styles.activeBarButton}`} onClick={() => setSection("pool")}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path></svg>
@@ -303,8 +368,7 @@ const Domus = () => {
                             Clima
                         </button>
                     </>
-                )}
-                
+                )}*/}
             </div>
 
             {section === "home" && (
@@ -320,12 +384,34 @@ const Domus = () => {
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
                                 </div>
                                 <div id={stylesHome.cardBody}>
-                                    <p>{Object.values(lights).filter(value => value === true).length}/10</p>
+                                    <p>{Object.values(lights).filter(value => value === true).length}/6</p>
                                     <p>Luces encendidas</p>
                                 </div>
                             </button>
 
-                            <button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("elevator"); else setTimeout(() => setSection("elevator"), 500)}}>
+                            {screen && (
+                              <button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("doors"); else setTimeout(() => setSection("doors"), 500)}}>
+                                  <div id={stylesHome.cardTitle}>
+                                      <div>
+                                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="hsl(144 100% 39%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 4h3a2 2 0 0 1 2 2v14"></path><path d="M2 20h3"></path><path d="M13 20h9"></path><path d="M10 12v.01"></path><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"></path></svg>
+                                          <p>{!screen ? "Control de Puertas" : "Puertas"}</p>
+                                      </div>
+                                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                                  </div>
+                                  <div id={stylesHome.cardBody} style={{gap: "5px"}}>
+                                      <div id={stylesHome.row2}>
+                                          <p>{!screen ? "Puerta Principal" : "Principal"}</p>
+                                          <div className={actuators.mainDoor ? stylesHome.doorClosed : stylesHome.doorOpened}>{actuators.mainDoor ? "Cerrada" : "Abierta"}</div>
+                                      </div>
+                                      <div id={stylesHome.row2}>
+                                          <p>{!screen ? "Puerta del Garaje" : "Garaje"}</p>
+                                          <div className={actuators.garageDoor ? stylesHome.doorClosed : stylesHome.doorOpened}>{actuators.garageDoor ? "Cerrada" : "Abierta"}</div>
+                                      </div>
+                                  </div>
+                              </button>
+                            )}
+
+                            {/*<button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("elevator"); else setTimeout(() => setSection("elevator"), 500)}}>
                                 <div id={stylesHome.cardTitle}>
                                     <div>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="rgb(139, 92, 246)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
@@ -337,7 +423,7 @@ const Domus = () => {
                                     <p>Piso {actuators.elevator}</p>
                                     <p>{isMoving ? "En movimiento..." : "Detenido"}</p>
                                 </div>
-                            </button>
+                            </button>*/}
 
                             {!screen && (
                                 <button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("doors"); else setTimeout(() => setSection("doors"), 500)}}>
@@ -363,7 +449,7 @@ const Domus = () => {
                         </div>
 
                         <div id={stylesHome.row}>
-                            {screen && (
+                            {/*{screen && (
                                 <button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("doors"); else setTimeout(() => setSection("doors"), 500)}}>
                                     <div id={stylesHome.cardTitle}>
                                         <div>
@@ -383,9 +469,9 @@ const Domus = () => {
                                         </div>
                                     </div>
                                 </button>
-                            )}
+                            )}*/}
 
-                            <button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("pool"); else setTimeout(() => setSection("pool"), 500)}}>
+                            {/*<button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("pool"); else setTimeout(() => setSection("pool"), 500)}}>
                                 <div id={stylesHome.cardTitle}>
                                     <div>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="hsl(216 100% 58%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path></svg>
@@ -397,9 +483,30 @@ const Domus = () => {
                                     <p>--</p>
                                     <p>-----</p>
                                 </div>
-                            </button>
+                            </button>*/}
 
                             {!screen && (
+                              <>
+                                <button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("security"); else setTimeout(() => setSection("security"), 500)}}>
+                                    <div id={stylesHome.cardTitle}>
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                              <g fill="none" stroke="rgb(139, 92, 246)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                                                <path d="M18.709 3.495C16.817 2.554 14.5 2 12 2s-4.816.554-6.709 1.495c-.928.462-1.392.693-1.841 1.419S3 6.343 3 7.748v3.49c0 5.683 4.542 8.843 7.173 10.196c.734.377 1.1.566 1.827.566s1.093-.189 1.827-.566C16.457 20.08 21 16.92 21 11.237V7.748c0-1.405 0-2.108-.45-2.834s-.913-.957-1.841-1.419"></path>
+                                                <path d="M12 9v1m-1-.5a1 1 0 1 0 2 0a1 1 0 0 0-2 0"></path>
+                                                <path d="M12.75 14h-1.5l.75-3.5z"></path>
+                                              </g>
+                                            </svg>
+                                            <p>Seguridad</p>
+                                        </div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                                    </div>
+                                    <div id={stylesHome.cardBody}>
+                                        <p>{ESP32.alarm ? "Activada" : "Desactivada"}</p>
+                                        <p>Alarma</p>
+                                    </div>
+                                </button>
+
                                 <button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("weather"); else setTimeout(() => setSection("weather"), 500)}}>
                                     <div id={stylesHome.cardTitle}>
                                         <div>
@@ -409,15 +516,36 @@ const Domus = () => {
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
                                     </div>
                                     <div id={stylesHome.cardBody}>
-                                        <p>--</p>
-                                        <p>-----</p>
+                                        <p>{actuators.AC !== 0 ? "Encendida" : "Apagada"}</p>
+                                        <p>Aire al {(actuators.AC/255*100).toFixed(0)}%</p>
                                     </div>
                                 </button>
+                              </>
                             )}
                         </div>
                         
                         {screen && (
                             <div id={stylesHome.row}>
+                                <button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("security"); else setTimeout(() => setSection("security"), 500)}}>
+                                    <div id={stylesHome.cardTitle}>
+                                        <div>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                              <g fill="none" stroke="rgb(139, 92, 246)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                                                <path d="M18.709 3.495C16.817 2.554 14.5 2 12 2s-4.816.554-6.709 1.495c-.928.462-1.392.693-1.841 1.419S3 6.343 3 7.748v3.49c0 5.683 4.542 8.843 7.173 10.196c.734.377 1.1.566 1.827.566s1.093-.189 1.827-.566C16.457 20.08 21 16.92 21 11.237V7.748c0-1.405 0-2.108-.45-2.834s-.913-.957-1.841-1.419"></path>
+                                                <path d="M12 9v1m-1-.5a1 1 0 1 0 2 0a1 1 0 0 0-2 0"></path>
+                                                <path d="M12.75 14h-1.5l.75-3.5z"></path>
+                                              </g>
+                                            </svg>
+                                            <p>Seguridad</p>
+                                        </div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                                    </div>
+                                    <div id={stylesHome.cardBody}>
+                                        <p>{ESP32.alarm ? "Activada" : "Desactivada"}</p>
+                                        <p>Alarma</p>
+                                    </div>
+                                </button>
+
                                 <button id={stylesHome.cardInfo} onClick={() => {if(!screen)setSection("weather"); else setTimeout(() => setSection("weather"), 500)}}>
                                     <div id={stylesHome.cardTitle}>
                                         <div>
@@ -427,8 +555,8 @@ const Domus = () => {
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
                                     </div>
                                     <div id={stylesHome.cardBody}>
-                                        <p>--</p>
-                                        <p>-----</p>
+                                        <p>{actuators.AC !== 0 ? "Encendida" : "Apagada"}</p>
+                                        <p>Aire al {(actuators.AC/255*100).toFixed(0)}%</p>
                                     </div>
                                 </button>
                             </div>
@@ -444,12 +572,12 @@ const Domus = () => {
                         <div id={stylesLights.titleInfo}>
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="hsl(44 100% 47%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
-                                <p>Nivel de luz: {!ESP32.state ? "--" : Math.max(0, (((ESP32.lightLevel - 2300) / (4095 - 2300)) * 70 + 30)).toFixed(0)}%</p>
+                                <p>Nivel de luz: {!ESP32.state ? "--" : (ESP32.lightLevel / 4095 * 100).toFixed(0)}%</p>
                             </div>
                         </div>
                     </div>
 
-                    {/*<div id={stylesLights.autoModeContainer}>
+                    <div id={stylesLights.autoModeContainer}>
                         <div id={stylesLights.autoModeTitle}>
                             <div>
                                 <div>
@@ -458,14 +586,14 @@ const Domus = () => {
                                 </div>
                                 <Switch className={ESP32.state === false && styles.ESP32Disabled} checked={ESP32.lightsAutoMode} onChange={() => handleToggleESP32("lightsAutoMode", !ESP32.lightsAutoMode)}/>
                             </div>
-                            <p>Las luces se encenderán automáticamente cuando el nivel de luz sea menor a 30%</p>
+                            <p>Las luces se encenderán automáticamente cuando el nivel de luz sea menor a 20%</p>
                         </div>
-                    </div>*/}
+                    </div>
 
                     <div/>
 
                     <div id={stylesLights.lightsCards}>
-                        <div id={stylesLights.floor}>
+                        {/*<div id={stylesLights.floor}>
                             <p>SEGUNDO PISO</p>
 
                             <div id={stylesLights.row}>
@@ -511,43 +639,7 @@ const Domus = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div id={stylesLights.floor}>
-                            <p>PRIMER PISO</p>
-
-                            <div id={stylesLights.row}>
-                                <div id={stylesLights.card}>
-                                    <div id={stylesLights.cardTitle}>
-                                        <div>
-                                            <svg className={lights.garage ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
-                                            <p>Garaje</p>
-                                        </div>
-                                        <Switch className={ESP32.state === false && styles.ESP32Disabled} checked={lights.garage} onChange={() => handleToggleLight("garage", !lights.garage)}/>
-                                    </div>
-                                </div>
-
-                                <div id={stylesLights.card}>
-                                    <div id={stylesLights.cardTitle}>
-                                        <div>
-                                            <svg className={lights.hall ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
-                                            <p>Sala</p>
-                                        </div>
-                                        <Switch className={ESP32.state === false && styles.ESP32Disabled} checked={lights.hall} onChange={() => handleToggleLight("hall", !lights.hall)}/>
-                                    </div>
-                                </div>
-
-                                <div id={stylesLights.card}>
-                                    <div id={stylesLights.cardTitle}>
-                                        <div>
-                                            <svg className={lights.kitchen ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
-                                            <p>Cocina</p>
-                                        </div>
-                                        <Switch className={ESP32.state === false && styles.ESP32Disabled} checked={lights.kitchen} onChange={() => handleToggleLight("kitchen", !lights.kitchen)}/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </div>*/}
 
                         <div id={stylesLights.floor}>
                             <p>EXTERIOR</p>
@@ -573,7 +665,7 @@ const Domus = () => {
                                     </div>
                                 </div>
 
-                                <div id={stylesLights.card}>
+                                {/*<div id={stylesLights.card}>
                                     <div id={stylesLights.cardTitle}>
                                         <div>
                                             <svg className={lights.pool ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
@@ -581,7 +673,65 @@ const Domus = () => {
                                         </div>
                                         <Switch className={ESP32.state === false || ESP32.lightsAutoMode ? styles.ESP32Disabled : undefined} checked={lights.pool} onChange={() => handleToggleLight("pool", !lights.pool)}/>
                                     </div>
+                                </div>*/}
+                            </div>
+                        </div>
+
+                        <div id={stylesLights.floor}>
+                            <p>INTERIOR</p>
+
+                            <div id={stylesLights.row}>
+                                <div id={stylesLights.card}>
+                                  <div id={stylesLights.cardTitle}>
+                                      <div>
+                                          <svg className={lights.garage ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+                                          <p>Garaje</p>
+                                      </div>
+                                      <Switch className={ESP32.state === false || ESP32.lightsAutoMode ? styles.ESP32Disabled : undefined} checked={lights.garage} onChange={() => handleToggleLight("garage", !lights.garage)}/>
+                                  </div>
                                 </div>
+
+                                <div id={stylesLights.card}>
+                                    <div id={stylesLights.cardTitle}>
+                                        <div>
+                                            <svg className={lights.hall ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+                                            <p>Sala</p>
+                                        </div>
+                                        <Switch className={ESP32.state === false || ESP32.lightsAutoMode ? styles.ESP32Disabled : undefined} checked={lights.hall} onChange={() => handleToggleLight("hall", !lights.hall)}/>
+                                    </div>
+                                </div>
+
+                                <div id={stylesLights.card}>
+                                    <div id={stylesLights.cardTitle}>
+                                        <div>
+                                            <svg className={lights.kitchen ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+                                            <p>Cocina</p>
+                                        </div>
+                                        <Switch className={ESP32.state === false || ESP32.lightsAutoMode ? styles.ESP32Disabled : undefined} checked={lights.kitchen} onChange={() => handleToggleLight("kitchen", !lights.kitchen)}/>
+                                    </div>
+                                </div>
+                            </div>
+
+                              <div id={stylesLights.row}>
+                                  <div id={stylesLights.card}>
+                                      <div id={stylesLights.cardTitle}>
+                                          <div>
+                                              <svg className={lights.privBedroom ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+                                              <p>Habitación</p>
+                                          </div>
+                                          <Switch className={ESP32.state === false || ESP32.lightsAutoMode ? styles.ESP32Disabled : undefined} checked={lights.privBedroom} onChange={() => handleToggleLight("privBedroom", !lights.privBedroom)}/>
+                                      </div>
+                                  </div>
+                                  
+                                  <div id={stylesLights.card}>
+                                      <div id={stylesLights.cardTitle}>
+                                          <div>
+                                              <svg className={lights.bath ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+                                              <p>Baño</p>
+                                          </div>
+                                          <Switch className={ESP32.state === false || ESP32.lightsAutoMode ? styles.ESP32Disabled : undefined} checked={lights.bath} onChange={() => handleToggleLight("bath", !lights.bath)}/>
+                                      </div>
+                                  </div>
                             </div>
                         </div>
                     </div>
@@ -665,7 +815,7 @@ const Domus = () => {
 
                                 <div id={stylesDoors.lightContainer}>
                                     <svg className={lights.entrance ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
-                                    <Switch className={ESP32.state === false && styles.ESP32Disabled} checked={lights.entrance} onChange={() => handleToggleLight("entrance", !lights.entrance)}/>
+                                    <Switch className={ESP32.state === false || ESP32.lightsAutoMode ? styles.ESP32Disabled : undefined} checked={lights.entrance} onChange={() => handleToggleLight("entrance", !lights.entrance)}/>
                                 </div>
                             </div>
                         </div>
@@ -695,7 +845,7 @@ const Domus = () => {
 
                                 <div id={stylesDoors.lightContainer}>
                                     <svg className={lights.garage ? stylesDoors.lightOn : stylesDoors.lightOff} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
-                                    <Switch className={ESP32.state === false && styles.ESP32Disabled} checked={lights.garage} onChange={() => handleToggleLight("garage", !lights.garage)}/>
+                                    <Switch className={ESP32.state === false || ESP32.lightsAutoMode ? styles.ESP32Disabled : undefined} checked={lights.garage} onChange={() => handleToggleLight("garage", !lights.garage)}/>
                                 </div>
                             </div>
                         </div>
@@ -800,6 +950,42 @@ const Domus = () => {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {(ESP32.alarmActive && ESP32.alarm) && (
+              <div className="fixed flex justify-center items-center inset-0 z-1000 w-full h-full bg-(--bg)/50 backdrop-blur-xs">
+                <div className="flex flex-col items-center bg-(--bg3) py-10 px-15 border-2 border-(--border) rounded-xl text-(--text) space-y-5">
+                  <svg style={{animation: "shrink infinite 0.5s"}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path fill="none" stroke="rgb(246, 59, 59)" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 18v-6a5 5 0 1 1 10 0v6M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2zm16-9h1m-3.5-7.5L18 5M2 12h1m9-10v1M4.929 4.929l.707.707M12 12v6"></path>
+                  </svg>
+
+                  <span className="text-[20px]">¡INTRUSO!</span>x
+
+                  <button className={`!px-3 !py-1 !bg-(--border)/50 active:scale-95 !border !border-(--border) !rounded-lg !shadow-md !transition-all ${ESP32.state === false ? styles.ESP32Disabled : ""}`} onClick={() => {handleToggleESP32("alarmActive", !ESP32.alarmActive); handleToggleESP32("alarm", !ESP32.alarm);}}>Desactivar</button>
+                </div>
+              </div>
+            )}
+            {section === "security" && (
+              <div id={stylesLights.lightsSection}>
+                  <div id={stylesLights.titleSection}>
+                      <p>Control de Seguridad</p>
+                  </div>
+
+                  <div id={stylesLights.autoModeContainer}>
+                      <div id={stylesLights.autoModeTitle}>
+                          <div>
+                              <div>
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path fill="none" stroke="rgb(246, 59, 59)" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 18v-6a5 5 0 1 1 10 0v6M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2zm16-9h1m-3.5-7.5L18 5M2 12h1m9-10v1M4.929 4.929l.707.707M12 12v6"></path>
+                                  </svg>
+                                  <p>Alarma de seguridad</p>
+                              </div>
+                              <Switch className={ESP32.state === false && styles.ESP32Disabled} checked={ESP32.alarm} onChange={() => handleToggleESP32("alarm", !ESP32.alarm)}/>
+                          </div>
+                          <p>Al detectar movimiento en los alrededores de la casa, se emitirá una fuerte alarma.</p>
+                      </div>
+                  </div>
+              </div>
             )}
         </div>
     );

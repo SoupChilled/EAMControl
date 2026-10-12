@@ -8,14 +8,14 @@ const routes = [
     {path: "/", element: <Navigate to="/esp32" />},
 
     {path: "/boards", element:
-        <Boards/>
+        <Navigate to="/esp32/smart-home" />
     },
 
     {path: "/esp32", element:
-        <ESP32/>
+        <Navigate to="/esp32/smart-home" />
     },
 
-    {path: "/esp32/domus", element:
+    {path: "/esp32/smart-home", element:
         <Domus/>
     },
 ];
