@@ -267,7 +267,7 @@ useEffect(() => {
 
                         <div className={styles.lightsState} style={{color: "hsl(44 100% 47%)"}}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
-                            <p>{Object.values(lights).filter(value => value === true).length}/6 Luces</p>
+                            <p>{Object.values(lights).filter(value => value === true).length}/7 Luces</p>
                         </div>
 
                         <div className={styles.doorsState} style={{color: "hsl(144 100% 39%)"}}>
@@ -384,7 +384,7 @@ useEffect(() => {
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
                                 </div>
                                 <div id={stylesHome.cardBody}>
-                                    <p>{Object.values(lights).filter(value => value === true).length}/6</p>
+                                    <p>{Object.values(lights).filter(value => value === true).length}/7</p>
                                     <p>Luces encendidas</p>
                                 </div>
                             </button>

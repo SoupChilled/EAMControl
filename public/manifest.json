@@ -2,7 +2,7 @@
     "name": "SMART HOME",
     "short_name": "SMART HOME",
     "start_url": "/esp32/smart-home",
-    "display": "fullscreen",
+    "display": "standalone",
     "theme_color": "hsl(208, 79%, 4%)",
     "background_color": "hsl(210, 83%, 2%)",
 
