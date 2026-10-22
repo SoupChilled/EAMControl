@@ -294,7 +294,7 @@ useEffect(() => {
                             <p>Alarma {ESP32.alarm === true ? "activada" : "desactivada"}</p>
                         </div>
 
-                        {admin && showCode ? (<button onClick={() => handleToggleESP32("code", String(Math.floor(Math.random() * 9000)+1000))}>Code: {ESP32.code}</button>) : null}
+                        {admin && showCode ? (<button onClick={() => handleToggleESP32("code", Number(Math.floor(Math.random() * 9000)+1000))}>Code: {ESP32.code}</button>) : null}
                     </div>
                 </div>
             </div>
