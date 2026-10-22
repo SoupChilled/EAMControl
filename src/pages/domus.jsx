@@ -102,7 +102,22 @@ const Domus = () => {
         // eslint-disable-next-line
     }, [ESP32.code]);
 
-    let pressTimer;
+    const pressTimer = useRef(null);
+    const startPress = () => {
+      if (pressTimer.current) clearTimeout(pressTimer.current);
+      
+      pressTimer.current = setTimeout(() => {
+        setShowCode(prev => !prev);
+      }, 1000);
+    };
+
+    const cancelPress = () => {
+      if (pressTimer.current) {
+        clearTimeout(pressTimer.current);
+        pressTimer.current = null;
+      }
+    };
+
     useEffect(() => {
         const handleToggleShowCode = (e) => {
             if(e.ctrlKey && e.altKey && e.key === "k"){
@@ -173,52 +188,6 @@ const Domus = () => {
             console.log("Error:" + error.code);
         }
     }
-
-    const audioRef = useRef(null);
-
-useEffect(() => {
-  const playAudio = () => {
-    if (audioRef.current) {
-      audioRef.current.play()
-        .then(() => {
-          window.removeEventListener('click', playAudio);
-          window.removeEventListener('touchstart', playAudio);
-        })
-        .catch((error) => {
-          console.log("Autoplay bloqueado. Esperando interacción...", error);
-        });
-    }
-  };
-
-  if (ESP32.alarmActive && ESP32.alarm) {
-    if (!audioRef.current) {
-      audioRef.current = new Audio("/sounds/buzzer.mp3");
-      audioRef.current.loop = true;
-    }
-
-    playAudio();
-
-    window.addEventListener('click', playAudio);
-    window.addEventListener('touchstart', playAudio);
-
-  } else {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-    window.removeEventListener('click', playAudio);
-    window.removeEventListener('touchstart', playAudio);
-  }
-
-  return () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-    window.removeEventListener('click', playAudio);
-    window.removeEventListener('touchstart', playAudio);
-  };
-}, [ESP32.alarmActive, ESP32.alarm]);
-
     
     // RETURNS
     if(loading){
@@ -252,8 +221,18 @@ useEffect(() => {
         <div id={styles.MainContainer}>
             <div id={styles.head}>
                 <div id={styles.title}>
-                    <svg onTouchStart={() => {pressTimer = setTimeout(() => setShowCode(prev => !prev), 1000);}} onTouchEnd={() => clearTimeout(pressTimer)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    <p>SMART HOME</p>
+                    <svg
+                      onMouseDown={startPress}
+                      onMouseUp={cancelPress}
+                      onMouseLeave={cancelPress}
+                      onTouchStart={startPress}
+                      onTouchEnd={cancelPress}
+                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <div className={showCode && "relative pb-[10px]"}>
+                      <p className="">SMART HOME</p>
+                      {admin && showCode ? (<button className="absolute bottom-0" onClick={() => handleToggleESP32("code", Number(Math.floor(Math.random() * 9000)+1000))}>Code: {ESP32.code}</button>) : null}
+                    </div>
                     {/*<p>DOMUS {!screen && " - Casa Inteligente"}</p>*/}
                     {/*{admin && showCode && screen ? (<button onClick={() => handleToggleESP32("code", String(Math.floor(Math.random() * 9000)+1000))}>Code: {ESP32.code}</button>) : null}*/}
                 </div>
@@ -294,7 +273,7 @@ useEffect(() => {
                             <p>Alarma {ESP32.alarm === true ? "activada" : "desactivada"}</p>
                         </div>
 
-                        {admin && showCode ? (<button onClick={() => handleToggleESP32("code", Number(Math.floor(Math.random() * 9000)+1000))}>Code: {ESP32.code}</button>) : null}
+                        {/*{admin && showCode ? (<button onClick={() => handleToggleESP32("code", Number(Math.floor(Math.random() * 9000)+1000))}>Code: {ESP32.code}</button>) : null}*/}
                     </div>
                 </div>
             </div>

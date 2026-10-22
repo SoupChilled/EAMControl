@@ -113,6 +113,16 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+#title button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    color: var(--oqText);
+    font-size: 15px;
+    font-weight: 400;
+    text-wrap: nowrap;
+}
 #generalInfo{
     display: flex;
     flex-direction: row;
